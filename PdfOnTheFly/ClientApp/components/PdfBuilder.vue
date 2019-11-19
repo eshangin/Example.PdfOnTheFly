@@ -57,7 +57,7 @@
                         type: 'text', x: 350, y: 130, id: 1, value: 'Another text', fontSize: 22, label: 'Text field 2', color: '#aaaaff', refId: 'ref2'
                     },
                     {
-                        type: 'image', x: 80, y: 330, w: 200, h: 133, id: 2, refId: 'ref3', value: 'https://images.unsplash.com/photo-1558981033-0f0309284409?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80', label: 'Text field 1'
+                        type: 'image', x: 10, y: 630, w: 200, h: 133, id: 3, refId: 'ref4', value: 'https://miro.medium.com/max/700/1*bHzXDhGyvWNKi9xZNfliFg.png', label: 'Image field 1'
                     }
                 ],
                 backgroundUrl: 'https://img.freepik.com/free-vector/abstract-blue-geometric-shapes-background_1017-15490.jpg?size=626&ext=jpg',
@@ -166,28 +166,22 @@
                                 height: height,
                             });
 
-                            var shift = 0;
                             var objPromises = objects.map(obj => {
                                 if (obj.type == 'text') {
-                                    // Draw a string of text toward the top of the page
-                                    //const fontSize = 30
                                     var size = timesRomanFont.sizeAtHeight(obj.fontSize * scale.y);
                                     page.drawText(obj.value, {
-                                        //x: 0,// obj.x * scale.x + obj.fontSize / 2,
-                                        //y: shift,//obj.yInverse * scale.y + obj.fontSize / 2,
                                         x: obj.x * scale.x,
                                         y: obj.yInverse * scale.y,
                                         size: size,
                                         font: timesRomanFont,
                                         color: vm.hexToRgb(obj.color)
                                     });
-                                    shift += obj.fontSize / scale.y;
                                     console.log(obj.fontSize, size)
                                     return Promise.resolve();
                                 } else if (obj.type == 'image') {
                                     if (obj.value) {
                                         return vm.getBytes(obj.value).then(objImageBytes => {
-                                            return pdfDoc.embedJpg(objImageBytes).then(objImage => {
+                                            return pdfDoc.embedPng(objImageBytes).then(objImage => {
                                                 console.log(obj.value, objImage)
                                                 page.drawImage(objImage, {
                                                     x: obj.x * scale.x,
@@ -226,7 +220,6 @@
                     responseType: 'arraybuffer',
                     crossdomain: true
                 }).then(response => response.data);
-                    //.then(response => Buffer.from(response.data, 'binary').toString('base64'))
             },
             hexToRgb(hex) {
                 var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
