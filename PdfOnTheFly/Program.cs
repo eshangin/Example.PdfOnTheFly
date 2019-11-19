@@ -14,11 +14,24 @@ namespace PdfOnTheFly
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            BuildWebHost(args).Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            string envi = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build()
+                .GetSection("GeneralOptions")
+                .GetValue<string>("EnvironmentName");
+
+            return WebHost.CreateDefaultBuilder(args)
+                .UseEnvironment(envi)
+                .ConfigureAppConfiguration((builderContext, config) => { })
+                .ConfigureLogging((hostingContext, logging) => { logging.AddEventLog(); })
+                .UseStartup<Startup>()
+                .Build();
+        }
     }
 }

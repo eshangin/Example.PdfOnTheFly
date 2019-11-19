@@ -49,10 +49,14 @@ namespace PdfOnTheFly
                 app.UseHsts();
             }
 
-            app.UseWebpackDevMiddleware(new Microsoft.AspNetCore.SpaServices.Webpack.WebpackDevMiddlewareOptions
+            if (IsLocal(env))
             {
-                HotModuleReplacement = true,
-            });
+                // Webpack initialization with hot-reload.
+                app.UseWebpackDevMiddleware(new Microsoft.AspNetCore.SpaServices.Webpack.WebpackDevMiddlewareOptions
+                {
+                    HotModuleReplacement = true,
+                });
+            }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -64,6 +68,11 @@ namespace PdfOnTheFly
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private static bool IsLocal(IHostingEnvironment environment)
+        {
+            return environment.IsEnvironment("Local");
         }
     }
 }
