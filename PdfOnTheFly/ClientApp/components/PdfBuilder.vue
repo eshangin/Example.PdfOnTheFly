@@ -15,10 +15,19 @@
             </div>
             <div class="col-6">
                 <div v-for="obj in objects" :key="obj.id">
-                    <div v-if="obj.type == 'text'" class="form-group">
-                        <label>{{obj.label}}</label>
-                        <input class="form-control" v-model="obj.value" />
+                    <div class="form-row">
+                        <div v-if="obj.type == 'text'" class="form-group col-8" :class="{'col-9': obj.type == 'text'}">
+                            <label>{{obj.label}}</label>
+                            <input class="form-control" v-model="obj.value" />
+                        </div>
+                        <div class="col-3" v-if="obj.type == 'text'">
+                            <label>Text color</label>
+                            <select class="form-control" v-model="obj.color">
+                                <option v-for="c in availableColors" :value="c">{{c}}</option>
+                            </select>
+                        </div>
                     </div>
+                    
                     <div v-if="obj.type == 'image'" class="form-group">
                         <label>{{obj.label}} (put image URL here)</label>
                         <input class="form-control" v-model="obj.value" />
@@ -51,7 +60,8 @@
                         type: 'image', x: 80, y: 330, w: 200, h: 133, id: 2, refId: 'ref3', value: 'https://images.unsplash.com/photo-1558981033-0f0309284409?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80', label: 'Text field 1'
                     }
                 ],
-                backgroundUrl: 'https://img.freepik.com/free-vector/abstract-blue-geometric-shapes-background_1017-15490.jpg?size=626&ext=jpg'
+                backgroundUrl: 'https://img.freepik.com/free-vector/abstract-blue-geometric-shapes-background_1017-15490.jpg?size=626&ext=jpg',
+                availableColors: ['#000000', '#aaaaff', '#CC0000', '#006E2E']
             }
         },
         methods: {
